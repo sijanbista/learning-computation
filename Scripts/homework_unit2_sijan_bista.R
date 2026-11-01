@@ -18,6 +18,7 @@ missing_height <- sum(is.na(inv$Height_m))
 cat("Missing DBH values:", missing_dbh, "\n")
 cat("Missing Height values:", missing_height, "\n")
 
+#min adn max garera garna sakinxa
  
 dbh_minus99 <- sum(inv$DBH_cm == -99, na.rm = TRUE)
  
