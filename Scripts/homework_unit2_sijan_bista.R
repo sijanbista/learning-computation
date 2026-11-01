@@ -1,17 +1,18 @@
 #paprt 1
 inv <- read.csv("data/raw/bagmati_raw_inventory.csv")
+
 nrow(inv)
 ncol(inv)
 names(inv)
 str(inv)
-inv$DBH_cm
+
 class(inv$DBH_cm)
 typeof(inv$DBH_cm)
 class(inv$Species)
 typeof(inv$Species)
 print(names(inv))
  
- #part 2
+# part 2
 missing_dbh <- sum(is.na(inv$DBH_cm))
 missing_height <- sum(is.na(inv$Height_m))
 
@@ -37,7 +38,7 @@ cat("Non-positive DBH records:", non_positive_dbh, "\n")
 inv[inv$Plot_ID == "P17" &
     inv$Tree_ID == "T203", ]
 
- inv$DBH_cm[inv$Plot_ID == "P17" &
+inv$DBH_cm[inv$Plot_ID == "P17" &
            inv$Tree_ID == "T203"] <- 29.9
 
 inv[inv$Plot_ID == "P17" &
@@ -74,6 +75,8 @@ remaining_errors <- sum(
   inv$DBH_cm > 150 & inv$DBH_cm < 900,
   na.rm = TRUE
 )
+
+cat("Remaining Errros:", remaining_errors, "\n")
 #part 3
 
  inv_clean <- inv[
@@ -111,6 +114,20 @@ inv_clean[champion_row,
           c("Plot_ID", "Tree_ID", "Species",
             "DBH_cm", "Height_m")]
 
+unique(inv_clean$Species)
+
+# Correct Shorea robusta names
+inv_clean$Species[inv_clean$Species == "S. robusta"] <- "Shorea robusta"
+
+inv_clean$Species[inv_clean$Species == "Shorea rubusta"] <- "Shorea robusta"
+
+# Correct Schima wallichii name
+inv_clean$Species[inv_clean$Species == "Schima wallichi"] <- "Schima wallichii"
+
+# Correct Castanopsis indica name
+inv_clean$Species[inv_clean$Species == "C. indica"] <- "Castanopsis indica"
+
+unique(inv_clean$Species)
 sal <- inv_clean[
   inv_clean$Species == "Shorea robusta", ]
 
@@ -204,8 +221,7 @@ if (!dir.exists("Figures")) {
 # Prepare records with valid DBH and height
 plot_data <- inv_clean[
   !is.na(inv_clean$Height_m) &
-  inv_clean$Height_m > 0 &
-  inv_clean$Height_m != -99, 
+  inv_clean$Height_m > 0, 
 ]
 
 # Save diagnostic graph
